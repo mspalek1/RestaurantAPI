@@ -1,33 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace RestaurantAPI.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+namespace RestaurantAPI.Controllers
 {
-    private static readonly string[] Summaries = new[]
+    [ApiController]
+    [Route("[controller]")]
+    public class WeatherForecastController : ControllerBase
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
 
-    private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IWeatherForecastService _service;
+        private readonly ILogger<WeatherForecastController> _logger;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    {
-        _logger = logger;
-    }
-
-    [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
-    {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherForecastService service)
         {
-            Date = DateTime.Now.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+            _logger = logger;
+            _service = service;
+        }
+
+        [HttpGet]
+        public IEnumerable<WeatherForecast> Get()
+        {
+            var result = _service.Get();
+            return result;
+        }
     }
 }
-

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RestaurantAPI.Entities
 {
-    public class RestaurantDvContext: DbContext
+    public class RestaurantDbContext: DbContext
     {
         private string _connectionString =
             "Server=localhost;Database=RestaurantDb;User Id=sa; Password=Strong.Pwd-123;";
@@ -21,6 +21,17 @@ namespace RestaurantAPI.Entities
             modelBuilder.Entity<Dish>()
                 .Property(r => r.Name)
                 .IsRequired();
+
+            modelBuilder.Entity<Address>()
+                .Property(a => a.City)
+                .IsRequired()
+                .HasMaxLength(50);
+            
+            modelBuilder.Entity<Address>()
+                .Property(a => a.Street)
+                .IsRequired()
+                .HasMaxLength(50);
+            
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
